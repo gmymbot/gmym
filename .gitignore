@@ -1,0 +1,9 @@
+# npm stuff
+node_modules/
+.npm/
+
+# os generated files
+.DS_Store
+
+# secrets
+.env

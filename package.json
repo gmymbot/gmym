@@ -1,0 +1,42 @@
+{
+  "name": "givemeyourmoney",
+  "version": "1.0.0-a1",
+  "description": "give me your money - your favorite utility bot",
+  "keywords": [
+    "discord",
+    "utility",
+    "bot"
+  ],
+  "homepage": "https://github.com/gmymbot/gmym#readme",
+  "bugs": {
+    "url": "https://github.com/gmymbot/gmym/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gmymbot/gmym.git"
+  },
+  "license": "CC-BY-NC-SA-4.0",
+  "author": "gmym <gmym@lezetho.xyz>",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@sentry/node": "^10.75.0",
+    "discord.js": "^14.27.0",
+    "dotenv": "^17.4.2",
+    "mongoose": "^9.10.1",
+    "signale": "^1.4.0"
+  },
+  "signale": {
+    "displayScope": false,
+    "displayBadge": true,
+    "displayDate": false,
+    "displayFilename": true,
+    "displayLabel": true,
+    "displayTimestamp": true,
+    "underlineLabel": true
+  }
+}
