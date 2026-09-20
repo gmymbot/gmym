@@ -221,7 +221,7 @@ module.exports = {
             .addSeparatorComponents(
                 new SeparatorBuilder()
                     .setDivider(true)
-                    .setSpacing(SeparatorSpacingSize.Large)
+                    .setSpacing(SeparatorSpacingSize.Small)
             )
             .addTextDisplayComponents(
                 new TextDisplayBuilder()
