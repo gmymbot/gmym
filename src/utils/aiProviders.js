@@ -1,35 +1,46 @@
 const signale = require("signale");
 
+const nonChatModelPatterns = [
+    /(?:^|[/:_-])(?:audio|embedding|embeddings|image|moderation|rerank|speech|tts|whisper)(?:$|[/:_-])/i,
+    /prompt-guard/i,
+    /orpheus/i,
+];
+
 const providers = {
     groq: {
         name: "Groq",
         type: "openai",
         baseURL: "https://api.groq.com/openai/v1",
         keyEnv: "GROQ_API_KEY",
+        textOnly: true,
     },
     openai: {
         name: "OpenAI",
         type: "openai",
         baseURL: "https://api.openai.com/v1",
         keyEnv: "OPENAI_API_KEY",
+        textOnly: true,
     },
     openrouter: {
         name: "OpenRouter",
         type: "openai",
         baseURL: "https://openrouter.ai/api/v1",
         keyEnv: "OPENROUTER_API_KEY",
+        textOnly: true,
     },
     together: {
         name: "Together AI",
         type: "openai",
         baseURL: "https://api.together.xyz/v1",
         keyEnv: "TOGETHER_API_KEY",
+        textOnly: true,
     },
     gemini: {
         name: "Google Gemini",
         type: "gemini",
         baseURL: "https://generativelanguage.googleapis.com/v1beta",
         keyEnv: "GEMINI_API_KEY",
+        textOnly: true,
     },
 };
 
@@ -49,7 +60,7 @@ function getApiKeys(keyEnv) {
 
 function getEnabledProviders() {
     return Object.entries(providers)
-        .filter(([, provider]) => getApiKeys(provider.keyEnv).length > 0)
+        .filter(([, provider]) => getApiKeys(provider.keyEnv).length > 0 && provider.textOnly)
         .map(([id, provider]) => ({
             id,
             ...provider,
@@ -60,6 +71,10 @@ function getEnabledProviders() {
 function pickKey(provider) {
     provider._rotator = (provider._rotator || 0) % provider.keys.length;
     return provider.keys[provider._rotator++];
+}
+
+function isChatModel(model) {
+    return typeof model === "string" && !nonChatModelPatterns.some((pattern) => pattern.test(model));
 }
 
 async function fetchModels(provider) {
@@ -73,7 +88,7 @@ async function fetchModels(provider) {
             });
             if (!response.ok) return [];
             const data = await response.json();
-            return (data.data || []).map((model) => model.id);
+            return (data.data || []).map((model) => model.id).filter(isChatModel);
         }
 
         if (provider.type === "gemini") {
@@ -172,5 +187,6 @@ module.exports = {
     getEnabledProviders,
     refreshProviders,
     complete,
-    pickKey
+    pickKey,
+    isChatModel
 };
