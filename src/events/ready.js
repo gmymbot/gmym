@@ -22,8 +22,8 @@ module.exports = {
 
         client.user.setPresence({
             activities: [{
-                name: "your money",
-                type: ActivityType.Watching
+                name: "watching your money",
+                type: ActivityType.Custom
             }],
             status: "online",
         });
