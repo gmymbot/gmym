@@ -1,42 +1,55 @@
 {
-  "name": "givemeyourmoney",
-  "version": "1.0.0-a1",
-  "description": "give me your money - your favorite utility bot",
-  "keywords": [
-    "discord",
-    "utility",
-    "bot"
-  ],
-  "homepage": "https://github.com/gmymbot/gmym#readme",
-  "bugs": {
-    "url": "https://github.com/gmymbot/gmym/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gmymbot/gmym.git"
-  },
-  "license": "CC-BY-NC-SA-4.0",
-  "author": "gmym <gmym@lezetho.xyz>",
-  "type": "commonjs",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js"
-  },
-  "dependencies": {
-    "@sentry/node": "^10.75.0",
-    "discord.js": "^14.27.0",
-    "dotenv": "^17.4.2",
-    "mongoose": "^9.10.1",
-    "signale": "^1.4.0"
-  },
-  "signale": {
-    "displayScope": false,
-    "displayBadge": true,
-    "displayDate": false,
-    "displayFilename": true,
-    "displayLabel": true,
-    "displayTimestamp": true,
-    "underlineLabel": true
-  }
+    "name": "givemeyourmoney",
+    "version": "1.0.0-a1",
+    "description": "give me your money - your favorite utility bot",
+    "keywords": [
+        "discord",
+        "utility",
+        "bot"
+    ],
+    "homepage": "https://github.com/gmymbot/gmym#readme",
+    "bugs": {
+        "url": "https://github.com/gmymbot/gmym/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gmymbot/gmym.git"
+    },
+    "license": "CC-BY-NC-SA-4.0",
+    "author": "gmym <gmym@lezetho.xyz>",
+    "type": "commonjs",
+    "main": "src/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node src/index.js",
+        "lint": "eslint src/",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "lint:fix": "eslint src/ --fix"
+    },
+    "dependencies": {
+        "@sentry/node": "^10.75.0",
+        "chart.js": "^4.5.1",
+        "chartjs-node-canvas": "^5.0.0",
+        "discord.js": "^14.27.0",
+        "dotenv": "^17.4.2",
+        "mathjs": "^15.2.0",
+        "mongoose": "^9.10.1",
+        "signale": "^1.4.0",
+        "tweetnacl": "^1.0.3"
+    },
+    "signale": {
+        "displayScope": false,
+        "displayBadge": true,
+        "displayDate": false,
+        "displayFilename": true,
+        "displayLabel": true,
+        "displayTimestamp": true,
+        "underlineLabel": true
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "eslint": "^10.11.0",
+        "prettier": "^3.9.8"
+    }
 }

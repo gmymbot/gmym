@@ -35,7 +35,7 @@ module.exports = (client) => {
             if (!client._eventListeners.has(event.name)) client._eventListeners.set(event.name, []);
             client._eventListeners.get(event.name).push({
                 fn,
-                once: !!event.once
+                once: !!event.once,
             });
             loaded++;
         } catch (err) {
