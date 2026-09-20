@@ -11,14 +11,20 @@ module.exports = async (client) => {
 
     try {
         const existing = await rest.get(Routes.applicationCommands(client.user.id));
+        const commands = client.slashCommands.map((cmd) => cmd.data.toJSON());
 
-        if (existing.length > 0) {
+        const existingNames = new Set(existing.map((cmd) => cmd.name));
+        const localNames = new Set(commands.map((cmd) => cmd.name));
+
+        const missing = commands.filter((cmd) => !existingNames.has(cmd.name));
+        const removed = [...existingNames].filter((name) => !localNames.has(name));
+
+        if (missing.length === 0 && removed.length === 0) {
             return;
         }
 
-        const commands = client.slashCommands.map((cmd) => cmd.data.toJSON());
         await rest.put(Routes.applicationCommands(client.user.id), {
-            body: commands
+            body: commands,
         });
     } catch (err) {
         signale.error(`Failed to deploy commands: ${err.message}`);

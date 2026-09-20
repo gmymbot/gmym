@@ -27,6 +27,7 @@ module.exports = [
                 Buffer: "readonly",
                 TextEncoder: "readonly",
                 Uint8Array: "readonly",
+                fetch: "readonly",
                 setInterval: "readonly",
                 globalThis: "readonly",
                 require: "readonly",

@@ -24,6 +24,13 @@ function verifySignature(publicKey, timestamp, body, signature) {
     );
 }
 
+function resolveFlags(flags) {
+    if (Array.isArray(flags)) {
+        return flags.reduce((acc, flag) => acc | flag, 0);
+    }
+    return typeof flags === "number" ? flags : undefined;
+}
+
 module.exports = (client) => {
     const publicKey = process.env.HTTP_PUBLIC_KEY;
     if (!publicKey) {
@@ -32,7 +39,7 @@ module.exports = (client) => {
     }
 
     const rest = new REST({
-        version: "10"
+        version: "10",
     }).setToken(process.env.TOKEN);
     client.rest = rest;
 
@@ -57,16 +64,68 @@ module.exports = (client) => {
 
         if (interaction.type === 1) {
             res.writeHead(200, {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             });
-            return res.end(JSON.stringify({
-                type: 1
-            }));
+            return res.end(
+                JSON.stringify({
+                    type: 1,
+                })
+            );
+        }
+
+        if (interaction.type === 4) {
+            const command = client.slashCommands.get(interaction.data.name);
+            if (!command?.autocomplete) {
+                res.writeHead(400);
+                return res.end(JSON.stringify({
+                    type: 8,
+                    data: {
+                        choices: []
+                    }
+                }));
+            }
+
+            const focused = interaction.data.options?.find((o) => o.focused) || {
+                name: "",
+                value: "",
+            };
+
+            const autocomplete = {
+                client,
+                commandName: interaction.data.name,
+                options: {
+                    getString: (name) => interaction.data.options?.find((o) => o.name === name)?.value,
+                    getFocused: () => ({
+                        name: focused.name,
+                        value: focused.value
+                    }),
+                },
+                respond: async (choices) => {
+                    const data = (choices || []).map((choice) => ({
+                        name: String(choice.name),
+                        value: String(choice.value),
+                    }));
+                    res.writeHead(200, {
+                        "Content-Type": "application/json"
+                    });
+                    res.end(JSON.stringify({
+                        type: 8,
+                        data: {
+                            choices: data
+                        }
+                    }));
+                },
+            };
+
+            command.autocomplete(autocomplete).catch((err) => {
+                signale.error(`Error handling autocomplete for /${interaction.data.name}: ${err.message}`);
+            });
+            return;
         }
 
         if (interaction.type === 2) {
             res.writeHead(200, {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             });
 
             const command = client.slashCommands.get(interaction.data.name);
@@ -76,7 +135,7 @@ module.exports = (client) => {
                         type: 4,
                         data: {
                             content: "Unknown command",
-                            flags: 64
+                            flags: 64,
                         },
                     })
                 );
@@ -87,7 +146,7 @@ module.exports = (client) => {
 
             const replyData = {
                 sent: false,
-                response: null
+                response: null,
             };
             let responded = false;
 
@@ -119,7 +178,8 @@ module.exports = (client) => {
                             content: payload.content,
                             components: payload.components?.map((c) => c.toJSON?.() || c),
                             embeds: payload.embeds?.map((e) => e.toJSON?.() || e),
-                            flags: typeof payload.flags === "number" ? payload.flags : undefined,
+                            flags: resolveFlags(payload.flags),
+                            allowed_mentions: payload.allowedMentions,
                         },
                     };
                     respond(replyData.response);
@@ -139,21 +199,20 @@ module.exports = (client) => {
                         content: payload.content,
                         components: payload.components?.map((c) => c.toJSON?.() || c),
                         embeds: payload.embeds?.map((e) => e.toJSON?.() || e),
-                        flags: payload.flags,
+                        flags: resolveFlags(payload.flags),
+                        allowed_mentions: payload.allowedMentions,
                     };
                     const files = payload.files?.map((f) => ({
                         data: f.attachment,
-                        name: f.name
+                        name: f.name,
                     }));
                     try {
                         return await rest.patch(webhookMessageUrl, {
                             body,
-                            files
+                            files,
                         });
                     } catch (err) {
-                        signale.error(
-                            err
-                        );
+                        signale.error(err);
                         throw err;
                     }
                 },
@@ -161,11 +220,11 @@ module.exports = (client) => {
                     const webhookRoute = Routes.webhook(interaction.application_id, interaction.token);
                     const files = payload.files?.map((f) => ({
                         data: f.attachment,
-                        name: f.name
+                        name: f.name,
                     }));
                     return rest.post(webhookRoute, {
                         body: payload,
-                        files
+                        files,
                     });
                 },
             };
@@ -178,7 +237,7 @@ module.exports = (client) => {
                     type: 4,
                     data: {
                         content: "There was an error while executing this command.",
-                        flags: 64
+                        flags: 64,
                     },
                 });
             }
@@ -187,7 +246,7 @@ module.exports = (client) => {
                 type: 4,
                 data: {
                     content: "There was an error while executing this command.",
-                    flags: 64
+                    flags: 64,
                 },
             });
             return;
