@@ -105,6 +105,32 @@ async function fetchModels(provider) {
     return [];
 }
 
+function normalizeUsage(raw) {
+    if (!raw) return null;
+    const prompt = raw.prompt_tokens ?? null;
+    const completion = raw.completion_tokens ?? null;
+    const total = raw.total_tokens ?? null;
+    if (prompt === null && completion === null && total === null) return null;
+    return {
+        prompt,
+        completion,
+        total,
+    };
+}
+
+function normalizeGeminiUsage(raw) {
+    if (!raw) return null;
+    const prompt = raw.promptTokenCount ?? null;
+    const completion = raw.candidatesTokenCount ?? null;
+    const total = raw.totalTokenCount ?? null;
+    if (prompt === null && completion === null && total === null) return null;
+    return {
+        prompt,
+        completion,
+        total,
+    };
+}
+
 async function complete(provider, model, messages, maxTokens) {
     const key = pickKey(provider);
 
@@ -129,7 +155,10 @@ async function complete(provider, model, messages, maxTokens) {
             throw new Error(error.error?.message || `Provider returned ${response.status}`);
         }
         const data = await response.json();
-        return data.choices?.[0]?.message?.content ?? "";
+        return {
+            content: data.choices?.[0]?.message?.content ?? "",
+            usage: normalizeUsage(data.usage),
+        };
     }
 
     if (provider.type === "gemini") {
@@ -155,7 +184,11 @@ async function complete(provider, model, messages, maxTokens) {
             throw new Error(error.error?.message || `Provider returned ${response.status}`);
         }
         const data = await response.json();
-        return (data.candidates?.[0]?.content?.parts || []).map((part) => part.text).join("") || "";
+        const content = (data.candidates?.[0]?.content?.parts || []).map((part) => part.text).join("") || "";
+        return {
+            content,
+            usage: normalizeGeminiUsage(data.usageMetadata),
+        };
     }
 
     throw new Error(`Unsupported provider type: ${provider.type}`);
