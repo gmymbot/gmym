@@ -12,6 +12,9 @@ const {
 const {
     recordPing
 } = require("../../utils/pingTracker");
+const {
+    formatDuration
+} = require("../../utils/formatDuration");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,6 +30,8 @@ module.exports = {
             db: 0
         };
 
+        const uptime = process.uptime();
+
         await interaction.deferReply();
         recordPing(client).catch((err) => signale.error(`Background ping failed: ${err.message}`));
         const chart = await generatePingChart(client.pingHistory);
@@ -35,7 +40,7 @@ module.exports = {
             new ContainerBuilder()
             .addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(
-                    `**${interaction.guild?.name || "DMs"}**\n> **WS Ping**: ${latest.ws}ms\n> **REST Ping**: ${latest.rest}ms\n> **Database Status**: Connected (${latest.db}ms)`
+                    `**${interaction.guild?.name || "DMs"}**\n> **WS Ping**: ${latest.ws}ms\n> **REST Ping**: ${latest.rest}ms\n> **Database Status**: Connected (${latest.db}ms)\n> **Uptime**: \`${formatDuration(uptime)}\``
                 )
             )
             .addMediaGalleryComponents(
