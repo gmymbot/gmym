@@ -5,8 +5,8 @@ const signale = require("signale");
 function getCommandFiles(dir) {
     const files = [];
     for (const entry of fs.readdirSync(dir, {
-            withFileTypes: true
-        })) {
+        withFileTypes: true,
+    })) {
         const fullPath = path.join(dir, entry.name);
         if (entry.isDirectory()) {
             files.push(...getCommandFiles(fullPath));

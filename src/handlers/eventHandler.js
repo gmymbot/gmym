@@ -6,10 +6,7 @@ module.exports = (client) => {
     if (!client._eventListeners) client._eventListeners = new Map();
 
     for (const [event, listeners] of client._eventListeners) {
-        for (const {
-                fn,
-                once
-            } of listeners) {
+        for (const { fn, once } of listeners) {
             if (once) client.removeListener(event, fn);
             else client.removeListener(event, fn);
         }

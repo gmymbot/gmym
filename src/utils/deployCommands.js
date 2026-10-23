@@ -1,12 +1,9 @@
-const {
-    REST,
-    Routes
-} = require("discord.js");
+const { REST, Routes } = require("discord.js");
 const signale = require("signale");
 
 module.exports = async (client, force = false) => {
     const rest = new REST({
-        version: "10"
+        version: "10",
     }).setToken(process.env.TOKEN);
 
     try {

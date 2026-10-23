@@ -1,11 +1,5 @@
-const {
-    SlashCommandBuilder,
-    MessageFlags,
-    TextDisplayBuilder
-} = require("discord.js");
-const {
-    evaluate
-} = require("mathjs");
+const { SlashCommandBuilder, MessageFlags, TextDisplayBuilder } = require("discord.js");
+const { evaluate } = require("mathjs");
 
 module.exports = {
     data: new SlashCommandBuilder()

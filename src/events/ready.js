@@ -1,15 +1,8 @@
-const {
-    Events,
-    ActivityType
-} = require("discord.js");
+const { Events, ActivityType } = require("discord.js");
 const loadEmojis = require("../handlers/emojiHandler");
-const {
-    trackPings
-} = require("../utils/pingTracker");
+const { trackPings } = require("../utils/pingTracker");
 const deployCommands = require("../utils/deployCommands");
-const {
-    refreshProviders
-} = require("../utils/aiProviders");
+const { refreshProviders } = require("../utils/aiProviders");
 
 module.exports = {
     name: Events.ClientReady,
@@ -21,10 +14,12 @@ module.exports = {
         setInterval(() => refreshProviders(client), 24 * 60 * 60 * 1000);
 
         client.user.setPresence({
-            activities: [{
-                name: "watching your money",
-                type: ActivityType.Custom
-            }],
+            activities: [
+                {
+                    name: "watching your money",
+                    type: ActivityType.Custom,
+                },
+            ],
             status: "online",
         });
     },

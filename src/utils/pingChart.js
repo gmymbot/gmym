@@ -1,14 +1,10 @@
-const {
-    ChartJSNodeCanvas
-} = require("chartjs-node-canvas");
-const {
-    AttachmentBuilder
-} = require("discord.js");
+const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
+const { AttachmentBuilder } = require("discord.js");
 
 const canvas = new ChartJSNodeCanvas({
     width: 800,
     height: 400,
-    backgroundColour: "#2f3136"
+    backgroundColour: "#2f3136",
 });
 
 async function generatePingChart(history) {
@@ -17,7 +13,7 @@ async function generatePingChart(history) {
         return d.toLocaleTimeString("en-US", {
             hour: "2-digit",
             minute: "2-digit",
-            hour12: false
+            hour12: false,
         });
     });
 
@@ -25,7 +21,8 @@ async function generatePingChart(history) {
         type: "line",
         data: {
             labels,
-            datasets: [{
+            datasets: [
+                {
                     label: "WS Ping",
                     data: history.map((e) => e.ws),
                     borderColor: "#5865f2",
@@ -64,8 +61,8 @@ async function generatePingChart(history) {
                     labels: {
                         color: "#dcddde",
                         font: {
-                            size: 12
-                        }
+                            size: 12,
+                        },
                     },
                 },
             },
@@ -73,20 +70,20 @@ async function generatePingChart(history) {
                 x: {
                     ticks: {
                         color: "#72767d",
-                        maxTicksLimit: 10
+                        maxTicksLimit: 10,
                     },
                     grid: {
-                        color: "#72767d33"
+                        color: "#72767d33",
                     },
                 },
                 y: {
                     min: 0,
                     ticks: {
                         color: "#72767d",
-                        callback: (v) => `${v}ms`
+                        callback: (v) => `${v}ms`,
                     },
                     grid: {
-                        color: "#72767d33"
+                        color: "#72767d33",
                     },
                     beginAtZero: true,
                 },
@@ -96,10 +93,10 @@ async function generatePingChart(history) {
 
     const buffer = await canvas.renderToBuffer(config);
     return new AttachmentBuilder(buffer, {
-        name: "ping-chart.png"
+        name: "ping-chart.png",
     });
 }
 
 module.exports = {
-    generatePingChart
+    generatePingChart,
 };

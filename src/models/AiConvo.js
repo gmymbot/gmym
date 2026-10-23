@@ -1,7 +1,4 @@
-const {
-    Schema,
-    model
-} = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const aiConvoSchema = new Schema({
     isChannel: {
@@ -12,11 +9,13 @@ const aiConvoSchema = new Schema({
         type: String,
         required: true,
     },
-    messageArray: [{
-        role: String,
-        content: String,
-        _id: false,
-    }, ],
+    messageArray: [
+        {
+            role: String,
+            content: String,
+            _id: false,
+        },
+    ],
     expiresAt: Number,
 });
 

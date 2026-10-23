@@ -1,8 +1,4 @@
-const {
-    SlashCommandBuilder,
-    MessageFlags,
-    TextDisplayBuilder
-} = require("discord.js");
+const { SlashCommandBuilder, MessageFlags, TextDisplayBuilder } = require("discord.js");
 const deployCommands = require("../../utils/deployCommands");
 
 module.exports = {
@@ -27,10 +23,7 @@ module.exports = {
                 ? `${cross} Failed to deploy commands, check the logs.`
                 : `${check} Redeployed ${deployed} commands.`;
 
-        const container = [
-            new TextDisplayBuilder()
-                .setContent(result)
-        ];
+        const container = [new TextDisplayBuilder().setContent(result)];
 
         return interaction.reply({
             components: container,

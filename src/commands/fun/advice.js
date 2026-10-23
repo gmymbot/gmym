@@ -4,7 +4,7 @@ const {
     TextDisplayBuilder,
     ContainerBuilder,
     SeparatorBuilder,
-    SeparatorSpacingSize
+    SeparatorSpacingSize,
 } = require("discord.js");
 
 module.exports = {
@@ -41,15 +41,9 @@ module.exports = {
         }
 
         const container = new ContainerBuilder()
-            .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(`## ${eightball} **Advice**\n${slip.advice}`)
-            )
-            .addSeparatorComponents(
-                new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small)
-            )
-            .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(`-# ${dot} advice slip #${slip.id}`)
-            );
+            .addTextDisplayComponents(new TextDisplayBuilder().setContent(`## ${eightball} **Advice**\n${slip.advice}`))
+            .addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small))
+            .addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# ${dot} advice slip #${slip.id}`));
 
         return interaction.reply({
             components: [container],

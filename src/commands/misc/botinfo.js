@@ -4,11 +4,9 @@ const {
     TextDisplayBuilder,
     ContainerBuilder,
     SectionBuilder,
-    ThumbnailBuilder
+    ThumbnailBuilder,
 } = require("discord.js");
-const {
-    formatDuration
-} = require("../../utils/formatDuration");
+const { formatDuration } = require("../../utils/formatDuration");
 
 module.exports = {
     data: new SlashCommandBuilder()

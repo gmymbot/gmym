@@ -1,10 +1,6 @@
 const http = require("http");
 const nacl = require("tweetnacl");
-const {
-    REST,
-    Routes,
-    InteractionResponseType
-} = require("discord.js");
+const { REST, Routes, InteractionResponseType } = require("discord.js");
 const signale = require("signale");
 
 function parseBody(req) {
@@ -77,12 +73,14 @@ module.exports = (client) => {
             const command = client.slashCommands.get(interaction.data.name);
             if (!command?.autocomplete) {
                 res.writeHead(400);
-                return res.end(JSON.stringify({
-                    type: 8,
-                    data: {
-                        choices: []
-                    }
-                }));
+                return res.end(
+                    JSON.stringify({
+                        type: 8,
+                        data: {
+                            choices: [],
+                        },
+                    })
+                );
             }
 
             const focused = interaction.data.options?.find((o) => o.focused) || {
@@ -97,7 +95,7 @@ module.exports = (client) => {
                     getString: (name) => interaction.data.options?.find((o) => o.name === name)?.value,
                     getFocused: () => ({
                         name: focused.name,
-                        value: focused.value
+                        value: focused.value,
                     }),
                 },
                 respond: async (choices) => {
@@ -106,14 +104,16 @@ module.exports = (client) => {
                         value: String(choice.value),
                     }));
                     res.writeHead(200, {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
                     });
-                    res.end(JSON.stringify({
-                        type: 8,
-                        data: {
-                            choices: data
-                        }
-                    }));
+                    res.end(
+                        JSON.stringify({
+                            type: 8,
+                            data: {
+                                choices: data,
+                            },
+                        })
+                    );
                 },
             };
 
@@ -121,6 +121,17 @@ module.exports = (client) => {
                 signale.error(`Error handling autocomplete for /${interaction.data.name}: ${err.message}`);
             });
             return;
+        }
+
+        if (interaction.type === 3) {
+            for (const command of client.slashCommands.values()) {
+                if (typeof command.handleButton === "function") {
+                    const result = await command.handleButton(interaction, client, res);
+                    if (result && result.handled) return;
+                }
+            }
+            res.writeHead(200, { "Content-Type": "application/json" });
+            return res.end(JSON.stringify({ type: 6 }));
         }
 
         if (interaction.type === 2) {

@@ -170,9 +170,11 @@ async function complete(provider, model, messages, maxTokens) {
             body: JSON.stringify({
                 contents: messages.map((message) => ({
                     role: message.role === "assistant" ? "model" : "user",
-                    parts: [{
-                        text: message.content
-                    }],
+                    parts: [
+                        {
+                            text: message.content,
+                        },
+                    ],
                 })),
                 generationConfig: {
                     maxOutputTokens: maxTokens,
@@ -221,5 +223,5 @@ module.exports = {
     refreshProviders,
     complete,
     pickKey,
-    isChatModel
+    isChatModel,
 };

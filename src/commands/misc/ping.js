@@ -6,15 +6,9 @@ const {
     MediaGalleryBuilder,
     MediaGalleryItemBuilder,
 } = require("discord.js");
-const {
-    generatePingChart
-} = require("../../utils/pingChart");
-const {
-    recordPing
-} = require("../../utils/pingTracker");
-const {
-    formatDuration
-} = require("../../utils/formatDuration");
+const { generatePingChart } = require("../../utils/pingChart");
+const { recordPing } = require("../../utils/pingTracker");
+const { formatDuration } = require("../../utils/formatDuration");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,7 +21,7 @@ module.exports = {
         const latest = client.pingHistory[client.pingHistory.length - 1] || {
             ws: 0,
             rest: 0,
-            db: 0
+            db: 0,
         };
 
         const uptime = process.uptime();
@@ -38,16 +32,16 @@ module.exports = {
 
         const container = [
             new ContainerBuilder()
-            .addTextDisplayComponents(
-                new TextDisplayBuilder().setContent(
-                    `**${interaction.guild?.name || "DMs"}**\n> **WS Ping**: ${latest.ws}ms\n> **REST Ping**: ${latest.rest}ms\n> **Database Status**: Connected (${latest.db}ms)\n> **Uptime**: \`${formatDuration(uptime)}\``
+                .addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(
+                        `**${interaction.guild?.name || "DMs"}**\n> **WS Ping**: ${latest.ws}ms\n> **REST Ping**: ${latest.rest}ms\n> **Database Status**: Connected (${latest.db}ms)\n> **Uptime**: \`${formatDuration(uptime)}\``
+                    )
                 )
-            )
-            .addMediaGalleryComponents(
-                new MediaGalleryBuilder().addItems(
-                    new MediaGalleryItemBuilder().setURL("attachment://ping-chart.png")
-                )
-            ),
+                .addMediaGalleryComponents(
+                    new MediaGalleryBuilder().addItems(
+                        new MediaGalleryItemBuilder().setURL("attachment://ping-chart.png")
+                    )
+                ),
         ];
 
         return interaction.editReply({

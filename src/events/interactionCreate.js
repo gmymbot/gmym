@@ -5,6 +5,16 @@ module.exports = {
     async execute(interaction) {
         if (process.env.HOST_HTTP_CONNECTIONS === "true" || process.env.HOST_HTTP_CONNECTIONS === "1") return;
 
+        if (interaction.isButton()) {
+            for (const command of interaction.client.slashCommands.values()) {
+                if (typeof command.handleButton === "function") {
+                    const result = await command.handleButton(interaction, interaction.client);
+                    if (result && result.handled) return;
+                }
+            }
+            return;
+        }
+
         if (interaction.isAutocomplete()) {
             const command = interaction.client.slashCommands.get(interaction.commandName);
             if (!command?.autocomplete) return;

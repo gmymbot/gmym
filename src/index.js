@@ -3,14 +3,8 @@ require("dotenv").config({
 });
 const signale = require("signale");
 globalThis.signale = signale;
-const {
-    version
-} = require("../package.json");
-const {
-    Client,
-    GatewayIntentBits,
-    Collection
-} = require("discord.js");
+const { version } = require("../package.json");
+const { Client, GatewayIntentBits, Collection } = require("discord.js");
 const mongoose = require("mongoose");
 const Sentry = require("@sentry/node");
 

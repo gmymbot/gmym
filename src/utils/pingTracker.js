@@ -12,7 +12,7 @@ async function recordPing(client) {
     try {
         const start = Date.now();
         await client.db.command({
-            ping: 1
+            ping: 1,
         });
         dbPing = Date.now() - start;
     } catch {}
@@ -22,7 +22,7 @@ async function recordPing(client) {
         ws: wsPing,
         rest: restPing,
         db: dbPing,
-        timestamp: now
+        timestamp: now,
     });
 
     const threeHoursAgo = now - 3 * 60 * 60 * 1000;
@@ -36,5 +36,5 @@ async function trackPings(client) {
 
 module.exports = {
     trackPings,
-    recordPing
+    recordPing,
 };

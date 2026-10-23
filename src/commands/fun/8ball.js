@@ -4,7 +4,7 @@ const {
     TextDisplayBuilder,
     ContainerBuilder,
     SeparatorBuilder,
-    SeparatorSpacingSize
+    SeparatorSpacingSize,
 } = require("discord.js");
 
 const answers = [
@@ -51,9 +51,7 @@ module.exports = {
                     `## ${eightball} **Magic 8-Ball**\n> ${question}\n\n**Answer:** ${answer}`
                 )
             )
-            .addSeparatorComponents(
-                new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small)
-            )
+            .addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small))
             .addTextDisplayComponents(
                 new TextDisplayBuilder().setContent(`-# ${dot} asked by ${interaction.user.username}`)
             );
@@ -62,7 +60,7 @@ module.exports = {
             components: [container],
             flags: MessageFlags.IsComponentsV2,
             allowedMentions: {
-                parse: []
+                parse: [],
             },
         });
     },
